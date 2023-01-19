@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class GestorArboles {
 	private static final String HOST = "localHost";
-	private static final String BBDD ="prueba";
+	private static final String BBDD ="eh_garden";
 	private static final String USERNAME = "root";
 	private static final String PASSWROD = "";
 	
@@ -58,22 +58,29 @@ public class GestorArboles {
 				arbol.setAltura(altArbol);
 				arbol.setOrigen(origenArbol);
 				
-				st.execute("INSERT INTO eh_garden (nombre_comun) VALUES"+ "('"+nombre+"')");
-				st.execute("INSERT INTO eh_garden (nombre_cientifico) VALUES"+ "('"+cientifico+"')");
-				st.execute("INSERT INTO eh_garden (habitat) VALUES"+ "('"+haabitat+"')");
-				st.execute("INSERT INTO eh_garden (altura) VALUES"+ "('"+altArbol+"')");
-				st.execute("INSERT INTO eh_garden (origen) VALUES"+ "('"+origenArbol+"')");
-
+				st.execute("INSERT INTO eh_garden (nombre_comun, nombre_cientifico, habitat, altura, origen ) VALUES"+ "('"+nombre+"', '"+cientifico+"', '"+haabitat+"', "+altArbol+" , '"+origenArbol+"' )");
+			
 
 
 				break;
 				
 				
 			case OPCION_DOS:
-				System.out.println("segunda opcion seleccionada\n");
+				System.out.println("Indica el nombre comun del arbol que quieras eliminar:");
+				String nombreArbolDelete = scan.nextLine();
+				String sentenciaDelete= "DELETE FROM eh_garden WHERE nombre_comun ='"+nombreArbolDelete+"'" ;
+				st.execute(sentenciaDelete);
+				
 				break;
 			case OPCION_TRES:
-				System.out.println("tercera opcion seleccionada\n");
+				System.out.println("Indica el id del arbol que quieras editar:");
+				int idArbolEdit = Integer.parseInt(scan.nextLine());
+				
+				
+				String sentenciaUpdate= "UPDATE animales SET nombre='aaa' WHERE id 12";	
+				st.executeUpdate(sentenciaUpdate);
+
+				
 				break;
 			case OPCION_CUATRO:
 				System.out.println("tercera opcion seleccionada\n");
