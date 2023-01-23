@@ -2,6 +2,8 @@ package Ejercicio1;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -58,32 +60,53 @@ public class GestorArboles {
 				arbol.setAltura(altArbol);
 				arbol.setOrigen(origenArbol);
 				
-				st.execute("INSERT INTO eh_garden (nombre_comun, nombre_cientifico, habitat, altura, origen ) VALUES"+ "('"+nombre+"', '"+cientifico+"', '"+haabitat+"', "+altArbol+" , '"+origenArbol+"' )");
-			
-
-
+				//st.execute("INSERT INTO eh_garden (nombre_comun, nombre_cientifico, habitat, altura, origen ) VALUES"+ "('"+nombre+"', '"+cientifico+"', '"+haabitat+"', "+altArbol+" , '"+origenArbol+"' )");
+				
+				PreparedStatement pstInsert=conexion.prepareStatement("INSERT INTO eh_garden (nombre_comun, nombre_cientifico, habitat, altura, origen ) VALUES(?,?,?,?,?)");
+				pstInsert.setString(1,nombre );
+				pstInsert.setString(2, cientifico);
+				pstInsert.setString(3,haabitat );
+				pstInsert.setInt(4, altArbol);
+				pstInsert.setString(5,origenArbol);
+				pstInsert.execute();
 				break;
 				
 				
 			case OPCION_DOS:
-				System.out.println("Indica el nombre comun del arbol que quieras eliminar:");
-				String nombreArbolDelete = scan.nextLine();
-				String sentenciaDelete= "DELETE FROM eh_garden WHERE nombre_comun ='"+nombreArbolDelete+"'" ;
+				System.out.println("Indica el ID del arbol que quieras eliminar:");
+				int idArbolDelete = Integer.parseInt(scan.nextLine());
+				String sentenciaDelete= "DELETE FROM eh_garden WHERE nombre_comun ='"+idArbolDelete+"'" ;
 				st.execute(sentenciaDelete);
 				
 				break;
 			case OPCION_TRES:
+				System.out.println("EDITANDO LOS DATOS DEL ARBOL:");
 				System.out.println("Indica el id del arbol que quieras editar:");
 				int idArbolEdit = Integer.parseInt(scan.nextLine());
 				
+				System.out.println("Introduce el nombreComun del arbol");
+				String nombreEdit = scan.nextLine();
+				System.out.println("Introduce el nombre cientifico");
+				String cientificoEdit = scan.nextLine();
+				System.out.println("Introduce su habitat");
+				String haabitatEdit= scan.nextLine();
+				System.out.println("Introduce la altura");
+				int altArbolEdit = Integer.parseInt(scan.nextLine());
+				System.out.println("Introduce su origen");
+				String origenArbolEdit=scan.nextLine();
 				
-				String sentenciaUpdate= "UPDATE animales SET nombre='aaa' WHERE id 12";	
+				String sentenciaUpdate= "UPDATE eh_garden SET nombre_comun='"+nombreEdit+"', nombre_cientifico='" + cientificoEdit + "', habitat='" + haabitatEdit +"', altura='" + altArbolEdit + "', origen= '" + origenArbolEdit + "' WHERE id = " + idArbolEdit;	
 				st.executeUpdate(sentenciaUpdate);
-
+				System.out.println("Arbol modificado, muchas gracias por tu espera y paciencia");
 				
 				break;
 			case OPCION_CUATRO:
-				System.out.println("tercera opcion seleccionada\n");
+				String senteciaSelect = "SELECT * FROM eh_garden";
+				ResultSet resultado =st.executeQuery(senteciaSelect);
+
+				while(resultado.next()) {
+					System.out.println(resultado.getInt(1) + " - " + resultado.getString(2) + " - " + resultado.getString(3) + " - " + resultado.getString(4) + " - " + resultado.getString(5) + " - " + resultado.getString(6));
+				}
 				break;
 			case SALIR:
 				System.out.println("ADIOS");
