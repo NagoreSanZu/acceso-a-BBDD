@@ -75,8 +75,11 @@ public class GestorArboles {
 			case OPCION_DOS:
 				System.out.println("Indica el ID del arbol que quieras eliminar:");
 				int idArbolDelete = Integer.parseInt(scan.nextLine());
-				String sentenciaDelete= "DELETE FROM eh_garden WHERE nombre_comun ='"+idArbolDelete+"'" ;
-				st.execute(sentenciaDelete);
+				//String sentenciaDelete= "DELETE FROM eh_garden WHERE nombre_comun ='"+idArbolDelete+"'" ;
+				//st.execute(sentenciaDelete);
+				PreparedStatement pstDelete=conexion.prepareStatement("DELETE FROM eh_garden WHERE id =?");
+				pstDelete.setInt(1, idArbolDelete);
+				pstDelete.execute();
 				
 				break;
 			case OPCION_TRES:
@@ -95,8 +98,10 @@ public class GestorArboles {
 				System.out.println("Introduce su origen");
 				String origenArbolEdit=scan.nextLine();
 				
-				String sentenciaUpdate= "UPDATE eh_garden SET nombre_comun='"+nombreEdit+"', nombre_cientifico='" + cientificoEdit + "', habitat='" + haabitatEdit +"', altura='" + altArbolEdit + "', origen= '" + origenArbolEdit + "' WHERE id = " + idArbolEdit;	
-				st.executeUpdate(sentenciaUpdate);
+				PreparedStatement pstUpdate =conexion.prepareStatement("UPDATE eh_garden SET nombre_comun=?, nombre_cientifico=?, habitat=?, altura=? origen=?");
+
+				//String sentenciaUpdate= "UPDATE eh_garden SET nombre_comun='"+nombreEdit+"', nombre_cientifico='" + cientificoEdit + "', habitat='" + haabitatEdit +"', altura='" + altArbolEdit + "', origen= '" + origenArbolEdit + "' WHERE id = " + idArbolEdit;	
+				//st.executeUpdate(sentenciaUpdate);
 				System.out.println("Arbol modificado, muchas gracias por tu espera y paciencia");
 				
 				break;
