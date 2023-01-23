@@ -98,8 +98,15 @@ public class GestorArboles {
 				System.out.println("Introduce su origen");
 				String origenArbolEdit=scan.nextLine();
 				
-				PreparedStatement pstUpdate =conexion.prepareStatement("UPDATE eh_garden SET nombre_comun=?, nombre_cientifico=?, habitat=?, altura=? origen=?");
-
+				PreparedStatement pstUpdate =conexion.prepareStatement("UPDATE eh_garden SET nombre_comun=?, nombre_cientifico=?, habitat=?, altura=?, origen=? WHERE id=?");
+				pstUpdate.setString(1, nombreEdit);
+				pstUpdate.setString(2,cientificoEdit);
+				pstUpdate.setString(3, haabitatEdit);
+				pstUpdate.setInt(4,altArbolEdit);
+				pstUpdate.setString(5,origenArbolEdit );
+				pstUpdate.setInt(6,idArbolEdit);
+				pstUpdate.executeUpdate();
+				
 				//String sentenciaUpdate= "UPDATE eh_garden SET nombre_comun='"+nombreEdit+"', nombre_cientifico='" + cientificoEdit + "', habitat='" + haabitatEdit +"', altura='" + altArbolEdit + "', origen= '" + origenArbolEdit + "' WHERE id = " + idArbolEdit;	
 				//st.executeUpdate(sentenciaUpdate);
 				System.out.println("Arbol modificado, muchas gracias por tu espera y paciencia");
