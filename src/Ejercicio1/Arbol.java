@@ -80,7 +80,8 @@ public class Arbol {
 		return "Arbol id=" + id + ", nombreComun=" + nombreComun + ", nombreCientifico=" + nombreCientifico
 				+ ", habitat=" + habitat + ", altura=" + altura + ", origen=" + origen ;
 	}
-	
+
+
 	
 	
 	
