@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GestorArboles {
@@ -27,7 +28,8 @@ public class GestorArboles {
 		final int OPCION_TRES = 3;
 		final int OPCION_CUATRO = 4;
 		final int SALIR = 0;
-
+		
+		
 		Scanner scan = new Scanner(System.in);
 		int opcion_menu;
 
@@ -63,11 +65,11 @@ public class GestorArboles {
 				//st.execute("INSERT INTO eh_garden (nombre_comun, nombre_cientifico, habitat, altura, origen ) VALUES"+ "('"+nombre+"', '"+cientifico+"', '"+haabitat+"', "+altArbol+" , '"+origenArbol+"' )");
 				
 				PreparedStatement pstInsert=conexion.prepareStatement("INSERT INTO eh_garden (nombre_comun, nombre_cientifico, habitat, altura, origen ) VALUES(?,?,?,?,?)");
-				pstInsert.setString(1,nombre );
-				pstInsert.setString(2, cientifico);
-				pstInsert.setString(3,haabitat );
-				pstInsert.setInt(4, altArbol);
-				pstInsert.setString(5,origenArbol);
+				pstInsert.setString(1,arbol.getNombreComun() );
+				pstInsert.setString(2, arbol.getNombreCientifico());
+				pstInsert.setString(3,arbol.getHabitat() );
+				pstInsert.setInt(4, arbol.getAltura());
+				pstInsert.setString(5,arbol.getOrigen());
 				pstInsert.execute();
 				break;
 				
@@ -75,10 +77,12 @@ public class GestorArboles {
 			case OPCION_DOS:
 				System.out.println("Indica el ID del arbol que quieras eliminar:");
 				int idArbolDelete = Integer.parseInt(scan.nextLine());
+				arbol.setId(idArbolDelete);
 				//String sentenciaDelete= "DELETE FROM eh_garden WHERE nombre_comun ='"+idArbolDelete+"'" ;
 				//st.execute(sentenciaDelete);
 				PreparedStatement pstDelete=conexion.prepareStatement("DELETE FROM eh_garden WHERE id =?");
-				pstDelete.setInt(1, idArbolDelete);
+				pstDelete.setInt(1, arbol.getId());
+				System.out.println("Eliminando arbol...");
 				pstDelete.execute();
 				
 				break;
@@ -86,6 +90,7 @@ public class GestorArboles {
 				System.out.println("EDITANDO LOS DATOS DEL ARBOL:");
 				System.out.println("Indica el id del arbol que quieras editar:");
 				int idArbolEdit = Integer.parseInt(scan.nextLine());
+				arbol.setId(idArbolEdit);
 				
 				System.out.println("Introduce el nombreComun del arbol");
 				String nombreEdit = scan.nextLine();
@@ -98,13 +103,19 @@ public class GestorArboles {
 				System.out.println("Introduce su origen");
 				String origenArbolEdit=scan.nextLine();
 				
+				arbol.setNombreComun(nombreEdit);
+				arbol.setNombreCientifico(cientificoEdit);
+				arbol.setHabitat(haabitatEdit);
+				arbol.setAltura(altArbolEdit);
+				arbol.setOrigen(origenArbolEdit);
+				
 				PreparedStatement pstUpdate =conexion.prepareStatement("UPDATE eh_garden SET nombre_comun=?, nombre_cientifico=?, habitat=?, altura=?, origen=? WHERE id=?");
-				pstUpdate.setString(1, nombreEdit);
-				pstUpdate.setString(2,cientificoEdit);
-				pstUpdate.setString(3, haabitatEdit);
-				pstUpdate.setInt(4,altArbolEdit);
-				pstUpdate.setString(5,origenArbolEdit );
-				pstUpdate.setInt(6,idArbolEdit);
+				pstUpdate.setString(1, arbol.getNombreComun());
+				pstUpdate.setString(2,arbol.getNombreCientifico());
+				pstUpdate.setString(3, arbol.getHabitat());
+				pstUpdate.setInt(4,arbol.getAltura());
+				pstUpdate.setString(5,arbol.getOrigen() );
+				pstUpdate.setInt(6,arbol.getId());
 				pstUpdate.executeUpdate();
 				
 				//String sentenciaUpdate= "UPDATE eh_garden SET nombre_comun='"+nombreEdit+"', nombre_cientifico='" + cientificoEdit + "', habitat='" + haabitatEdit +"', altura='" + altArbolEdit + "', origen= '" + origenArbolEdit + "' WHERE id = " + idArbolEdit;	
@@ -113,12 +124,29 @@ public class GestorArboles {
 				
 				break;
 			case OPCION_CUATRO:
+				
 				String senteciaSelect = "SELECT * FROM eh_garden";
 				ResultSet resultado =st.executeQuery(senteciaSelect);
-
+				ArrayList<Arbol> arboles= new ArrayList <Arbol>();
 				while(resultado.next()) {
-					System.out.println(resultado.getInt(1) + " - " + resultado.getString(2) + " - " + resultado.getString(3) + " - " + resultado.getString(4) + " - " + resultado.getString(5) + " - " + resultado.getString(6));
+					//System.out.println(resultado.getInt(1) + " - " + resultado.getString(2) + " - " + resultado.getString(3) + " - " + resultado.getString(4) + " - " + resultado.getString(5) + " - " + resultado.getString(6));
+					
+					arbol=new Arbol();
+					
+					arbol.setId(resultado.getInt("id"));
+					arbol.setNombreComun(resultado.getString("nombre_comun"));
+					arbol.setNombreCientifico(resultado.getString("nombre_cientifico"));
+					arbol.setHabitat(resultado.getString("habitat"));
+					arbol.setAltura(resultado.getInt("altura"));
+					arbol.setOrigen(resultado.getString("origen"));
+					
+					arboles.add(arbol);
 				}
+				
+				for (Arbol arbol2 : arboles) {
+					System.out.println(arbol2);
+				}
+				
 				break;
 			case SALIR:
 				System.out.println("ADIOS");
